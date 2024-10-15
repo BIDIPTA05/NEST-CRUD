@@ -10,7 +10,6 @@ describe('AppController', () => {
       controllers: [CatsController],
       providers: [AppService],
     }).compile();
-
     appController = app.get<CatsController>(CatsController);
   });
 

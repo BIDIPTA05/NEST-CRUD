@@ -1,41 +1,111 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Injectable()
 export class AppService {
   private users = [
-    { name: 'John', id: 1, subject: 'History' },
-    { name: 'Isabella', id: 2, subject: 'Science' },
-    { name: 'Olivia', id: 3, subject: 'Physics' },
-    { name: 'Sophia', id: 4, subject: 'Math' },
-    { name: 'Isabella', id: 5, subject: 'History' },
-    { name: 'Alice', id: 6, subject: 'Geography' },
-    { name: 'John', id: 7, subject: 'Physics' },
-    { name: 'David', id: 8, subject: 'English' },
-    { name: 'Isabella', id: 9, subject: 'Art' },
-    { name: 'Emma', id: 10, subject: 'Art' },
+    {
+      id: 1,
+      name: 'John',
+      subject: 'History',
+      email: 'john1@example.com',
+      phone: '555-0101',
+    },
+    {
+      id: 2,
+      name: 'Isabella',
+      subject: 'Science',
+      email: 'isabella2@example.com',
+      phone: '555-0102',
+    },
+    {
+      id: 3,
+      name: 'Olivia',
+      subject: 'Physics',
+      email: 'olivia3@example.com',
+      phone: '555-0103',
+    },
+    {
+      id: 4,
+      name: 'Sophia',
+      subject: 'Math',
+      email: 'sophia4@example.com',
+      phone: '555-0104',
+    },
+    {
+      id: 5,
+      name: 'Isabella',
+      subject: 'History',
+      email: 'isabella5@example.com',
+      phone: '555-0105',
+    },
+    {
+      id: 6,
+      name: 'Alice',
+      subject: 'Geography',
+      email: 'alice6@example.com',
+      phone: '555-0106',
+    },
+    {
+      id: 7,
+      name: 'John',
+      subject: 'Physics',
+      email: 'john7@example.com',
+      phone: '555-0107',
+    },
+    {
+      id: 8,
+      name: 'David',
+      subject: 'English',
+      email: 'david8@example.com',
+      phone: '555-0108',
+    },
+    {
+      id: 9,
+      name: 'Isabella',
+      subject: 'Art',
+      email: 'isabella9@example.com',
+      phone: '555-0109',
+    },
+    {
+      id: 10,
+      name: 'Emma',
+      subject: 'Art',
+      email: 'emma10@example.com',
+      phone: '555-0110',
+    },
   ];
   //get all users - READ
   getAllUsers(): object {
-    return this.users;
+    const users = this.users;
+    if (!users) {
+      throw new NotFoundException('No users found');
+    }
+    return users;
   }
   //get one user - READ
   getUser(id: string): object {
-    return this.users.find((user) => user.id === Number(id));
+    const user = this.users.find((user) => user.id === Number(id));
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
   //create an user - CREATE
-  createUser(user: { name: string; subject: string }): object {
-    const newUser = { id: this.users.length + 1, ...user };
+  createUser(createUserDTO: CreateUserDTO): object {
+    const newUser = { id: this.users.length + 1, ...createUserDTO };
     this.users.push(newUser);
     console.log('User created:', newUser);
     console.log('Updated users list:', this.users);
     return newUser;
   }
   //update an user - UPDATE
-  updateUser(id: string, update: { name?: string; subject?: string }) {
+  updateUser(id: string, updateUserDTO: UpdateUserDTO) {
     const user = this.users.find((user) => user.id === Number(id));
     if (user) {
       console.log(this.users);
-      return { ...user, ...update };
+      return { ...user, ...updateUserDTO };
     }
     return null;
   }

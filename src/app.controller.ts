@@ -21,13 +21,19 @@ import {
   Param,
   Patch,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Controller('user')
 export class CatsController {
+  getHello(): any {
+    throw new Error('Method not implemented.');
+  }
   //GET, POST, PATCH, DELETE
-  //It creates an insatance of the AppService class
+  //It creates an instance of the AppService class
   constructor(private readonly AppService: AppService) {}
   //GET ALL USERS
   @Get()
@@ -41,13 +47,16 @@ export class CatsController {
   }
   //CREATE AN USER
   @Post()
-  createUser(@Body() user: { name: string; subject: string }) {
-    return this.AppService.createUser(user);
+  createUser(@Body(ValidationPipe) createUserDTO: CreateUserDTO) {
+    return this.AppService.createUser(createUserDTO);
   }
   //UPDATE AN USER
   @Patch(':id')
-  getUpdate(@Param('id') id: string, @Body() updateUser: object) {
-    return this.AppService.updateUser(id, updateUser);
+  getUpdate(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDTO,
+  ) {
+    return this.AppService.updateUser(id, updateUserDto);
   }
   //DELETE AN USER
   @Delete(':id')
